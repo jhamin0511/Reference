@@ -3,6 +3,7 @@ package com.github.jhamin0511.reference
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -31,6 +32,7 @@ class ChangeDialog : DialogFragment() {
         callback = context as ChangeCallback
 
         entity = arguments?.getParcelable("entity")!!
+        Log.i(this::class.simpleName, "entity ${System.identityHashCode(entity)}")
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
