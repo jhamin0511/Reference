@@ -24,15 +24,11 @@ class ChangeDialog : DialogFragment() {
 
     private lateinit var editView: EditText
     private lateinit var entity: ChangeEntity
-    private lateinit var callback: ChangeCallback
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        callback = context as ChangeCallback
-
         entity = arguments?.getParcelable("entity")!!
-        Log.i(this::class.simpleName, "entity ${System.identityHashCode(entity)}")
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -41,13 +37,12 @@ class ChangeDialog : DialogFragment() {
         val view = inflater.inflate(R.layout.change_dialog, null, false)
 
         editView = view.findViewById(R.id.edit)
-        editView.setText(entity.text)
+        editView.setText(entity.getText())
 
         return AlertDialog.Builder(requireContext())
             .setView(view)
             .setPositiveButton(android.R.string.ok) { dialog, which ->
-                entity.text = editView.text.toString()
-                callback.onChange()
+                entity.setText(editView.text.toString())
             }.create()
     }
 

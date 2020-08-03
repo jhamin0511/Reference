@@ -7,25 +7,30 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import java.util.Observer
 
-class MainActivity : AppCompatActivity(), ChangeCallback {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var text: TextView
     private lateinit var dialog: Button
     private lateinit var activity: Button
 
     private var entity = ChangeEntity()
+    private val observer = Observer { o, arg ->
+        text.text = entity.getText()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        entity.addObserver(observer)
 
         setContentView(R.layout.activity_main)
         text = findViewById(R.id.text)
         dialog = findViewById(R.id.dialog)
         activity = findViewById(R.id.activity)
 
-        entity.text = text.text.toString()
-        Log.i(this::class.simpleName, "entity ${System.identityHashCode(entity)}")
+        entity.setText(text.text.toString())
 
         dialog.setOnClickListener {
             val dialog = ChangeDialog.getInstance(entity)
@@ -46,14 +51,10 @@ class MainActivity : AppCompatActivity(), ChangeCallback {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 ChangeActivity.REQUEST_CODE -> {
-                    text.text = entity.text
+                    text.text = entity.getText()
                 }
             }
         }
-    }
-
-    override fun onChange() {
-        text.text = entity.text
     }
 
 }
